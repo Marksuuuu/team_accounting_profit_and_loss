@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_team_accounting_profit_and_loss,access.team.profit.loss,model_team_profit_loss,base.group_user,1,1,1,1
+access_team_accounting_profit_and_loss_line,access.team.profit.loss.line,model_team_profit_loss_line,base.group_user,1,1,1,1
+
+access_team_accounting_profit_and_loss_analytic_account_line,access.team.analytic.line,model_team_analytic_line,base.group_user,1,1,1,1

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+          <record id="team_profit_loss_act_window" model="ir.actions.act_window">
+            <field name="name">Profit and Loss</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">team.profit.loss</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                There is no examples click here to add new ModelTitle.
+                </p>
+            </field>
+        </record>
+
+        <record id="team_profit_loss_line_act_window" model="ir.actions.act_window">
+            <field name="name">Profit and Loss</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">team.profit.loss.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                There is no examples click here to add new ModelTitle.
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="team_profit_loss_menu_id"
+                  name="Team Pacific Accounting Report"
+                  sequence="10"
+                  parent="account.menu_finance_reports"/>
+        <menuitem id="team_acct_rep" name="Team Accounting Report"  parent="account.menu_finance_reports" sequence=""/>
+        <menuitem name="Profit and Loss" id="team_profit_loss_report" parent="team_acct_rep" action="team_profit_loss_act_window" sequence="1"/>
+
+    </data>
+</odoo>
