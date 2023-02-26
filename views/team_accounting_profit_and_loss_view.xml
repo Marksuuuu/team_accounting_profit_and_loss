@@ -75,7 +75,7 @@
                                         </form>
                                     </field>
                                 </page>
-                                <page string="Noted">
+                                <page string="Notes">
                                     <field name="notes"/>
                                 </page>
                              </notebook>
