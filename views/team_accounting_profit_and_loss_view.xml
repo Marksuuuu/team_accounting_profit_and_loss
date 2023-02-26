@@ -8,11 +8,18 @@
             <field name="arch" type="xml">
                 <form string="Form">
                     <header>
-                        <button name="confirm_but" class="btn btn-secondary" string="Confirm" type="object" />
-                        <button name="post_but" class="oe_highlight" string="Post" type="object" atts="{'invisible': [('state', '!=', 'Confirm')}"/>
-                        <button name="cancel_but" string="Cancel" type="object" atts="{'invisible': [('state', '!=', 'Post')}"/>
-                        <button type="object" name="action_view_lines" string="Test" atts="{'invisible': [('state', '!=', 'Post')}"/>
-                        <field name="state" widget="statusbar" statusbar_visible="confirm,post,cancel"/>
+                        <button id="button_confirm" name="action_confirm" string="Confirm" class="btn-primary" states="draft"
+                            confirm="Are you sure that you need to confirm ?"
+                            type="object"/>
+                        <button id="button_done" name="action_done" string="Mark As Done" class="btn-primary" states="confirm"
+                            type="object"/>
+                        <button id="button_print" name="print_here" class="btn-danger" string="Print PDF" type="object" states="done" confirm="Do you really want to Print?"/>
+                        <button id="button_draft" name="action_draft" string="Set To Draft" class="btn-primary"
+                            states="cancel" type="object"/>
+                        <button id="button_cancel" name="action_cancel" string="Cancel" states="draft,done,confirm"
+                            confirm="Are you sure that you need to cancel ?"
+                            type="object"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done,confirm"/>
                     </header>
                     <!-- Invisible Fields -->
                     <group>
@@ -25,6 +32,8 @@
                                <field string="Analytic Account Line" name="view_count_data" widget="statinfo"/>
                             </button>
                         </div>
+                        <widget name="web_ribbon" title="Ready to Print" bg-color="bg-success" attrs="{'invisible': [('state',  'not in' , 'done')]}"/>
+                        <widget name="web_ribbon" title="Cancelled" bg-color="bg-warning" attrs="{'invisible': [('state',  'not in' , 'cancel')]}"/>
                         <group>
                            <div class="oe_title">
                                 <label for="name"/>
@@ -126,9 +135,9 @@
             <field name="name">team_profit_and_loss_tree</field>
             <field name="model">team.profit.loss</field>
             <field name="arch" type="xml">
-                <tree string="Tree">
+                <tree string="Tree" decoration-success="state == 'done'" decoration-danger="state == 'cancel'" decoration-primary="state == 'draft'">
                     <field name="name"/>
-                    <field name="state"/>
+                    <field name="state" widget="badge"/>
                 </tree>
             </field>
         </record>

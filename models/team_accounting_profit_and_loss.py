@@ -4,12 +4,9 @@ class ProfitAndLoss(models.Model):
     _description = 'Team Profit and Loss'
 
     name = fields.Char(string="Profit and Loss", readonly=True, copy=False, default='New')
-    state = fields.Selection(selection=[
-        ('post', 'Post'),
-        ('confirm', 'Confirm'),
-        ('cancel', 'Cancelled'),
-        ('draft', 'Draft'),
-    ], string='Status', readonly=True, copy=False, tracking=True, default='draft')
+    state = fields.Selection([('draft', 'Draft'), ('confirm', 'Confirmed'),
+                              ('done', 'Done'), ('cancel', 'Cancelled')], default='draft',
+                             string="Status", tracking=True)
 
     profit_and_loss_date_start = fields.Datetime('Date Start')
     profit_and_loss_date_end = fields.Datetime('Date End')
@@ -19,7 +16,6 @@ class ProfitAndLoss(models.Model):
     view_count_data = fields.Integer(string='Passed Data from View Count')
 
     def fetch_analytic_line_count(self):
-        print('sample')
         self.view_count = 0
         counting = self.env['team.analytic.line'].search_count([('team_profit_loss_conn', '=', self.id)])
         self.view_count_data = counting
@@ -51,17 +47,20 @@ class ProfitAndLoss(models.Model):
         result = super(ProfitAndLoss, self).create(vals)
         return result
 
-    def post_but(self):
-        for rec in self:
-            rec.state = 'post'
+    def print_here(self):
+        print('Print')
 
-    def confirm_but(self):
-        for rec in self:
-            rec.state = 'confirm'
+    def action_confirm(self):
+        self.state = 'confirm'
 
-    def cancel_but(self):
-        for rec in self:
-            rec.state = 'cancel'
+    def action_done(self):
+        self.state = 'done'
+
+    def action_draft(self):
+        self.state = 'draft'
+
+    def action_cancel(self):
+        self.state = 'cancel'
 
 
 class TeamProfitLossLine(models.Model):
