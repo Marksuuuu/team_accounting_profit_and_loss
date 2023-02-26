@@ -1,6 +1,4 @@
-from odoo import fields, models, api
-
-
+from odoo import fields, models, api, _
 class ProfitAndLoss(models.Model):
     _name = 'team.profit.loss'
     _description = 'Team Profit and Loss'
@@ -17,17 +15,33 @@ class ProfitAndLoss(models.Model):
     profit_and_loss_date_end = fields.Datetime('Date End')
     connection = fields.One2many('team.profit.loss.line', 'team_and_l')
     fetch_analytic_line_data = fields.Float()
-    view_count = fields.Integer()
+    view_count = fields.Integer(compute='fetch_analytic_line_count', string='Counting in Form')
+    view_count_data = fields.Integer(string='Passed Data from View Count')
+
+    def fetch_analytic_line_count(self):
+        print('sample')
+        self.view_count = 0
+        counting = self.env['team.analytic.line'].search_count([('team_profit_loss_conn', '=', self.id)])
+        self.view_count_data = counting
 
     def action_view_lines(self):
+        print('tangina')
+        self.ensure_one()
         return {
-            'name': 'Analytic Account Line',
+            'name': _('Analytic Account Line'),
             'view_mode': 'tree,form',
-            'res_model': 'team.profit.loss.line',
-            'view_id': self.env.ref("team_profit_loss_line_act_window").id,
+            'res_model': 'team.analytic.line',
+            # 'view_id': self.env.ref('team_accounting_profit_and_loss.analytic_acc_line_view_tree_new').id,
             'type': 'ir.actions.act_window',
-            'domain': [('payment_id', 'in', self.ids)],
+            'context': {
+            },
+            'domain': [('team_profit_loss_conn', '=', self.id)],
+            'target': 'current',
         }
+
+    def counting_self_name(self):
+        for rec in self:
+            print('sample')
 
     @api.model
     def create(self, vals):
@@ -55,7 +69,6 @@ class TeamProfitLossLine(models.Model):
     _description = 'Team Profit and Loss Move Line'
 
     team_and_l = fields.Many2one('team.profit.loss')
-    test = fields.Many2one('account.analytic.line')
     connection = fields.Many2one('team.analytic.line')
     analytic_acc = fields.Many2one('account.analytic.account', 'Analytic Account')
     debit_line_team = fields.Float('Debit', related='analytic_acc.ann_account_debit', stored=True)
@@ -72,9 +85,12 @@ class TeamProfitLossLine(models.Model):
     def _onchange_fetch_analytic_acc_line(self):
         for rec in self:
             get_id = rec.analytic_acc.line_ids
+            get_connection_data = rec.team_and_l._origin.id  #"""<--- In Here you can use ._origin.id to get the id if you have encounter <NewId origin=1> """
+            print(get_connection_data)
             for pass_data in get_id:
                 pass_value = self.connection
                 pass_value.create({
+                    'team_profit_loss_conn': get_connection_data,
                     'connection_id': rec.analytic_acc.id,
                     'analytic_id': pass_data.id,
                     'name': pass_data.name,

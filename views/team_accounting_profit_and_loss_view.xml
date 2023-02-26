@@ -8,16 +8,21 @@
             <field name="arch" type="xml">
                 <form string="Form">
                     <header>
-                        <button name="confirm_but" class="btn btn-secondary" string="Confirm" type="object" atts="{'invisible': [('state', '!=', 'confirm')}"/>
-                        <button name="post_but" class="oe_highlight" string="Post" type="object" atts="{'invisible': [('state', '!=', 'post')}"/>
-                        <button name="cancel_but" string="Cancel" type="object" atts="{'invisible': [('state', '!=', 'cancel')}"/>
-                        <button type="object" name="fetch_analytic_line_data_func" string="Test" atts="{'invisible': [('state', '!=', 'conform')}"/>
+                        <button name="confirm_but" class="btn btn-secondary" string="Confirm" type="object" />
+                        <button name="post_but" class="oe_highlight" string="Post" type="object" atts="{'invisible': [('state', '!=', 'Confirm')}"/>
+                        <button name="cancel_but" string="Cancel" type="object" atts="{'invisible': [('state', '!=', 'Post')}"/>
+                        <button type="object" name="action_view_lines" string="Test" atts="{'invisible': [('state', '!=', 'Post')}"/>
                         <field name="state" widget="statusbar" statusbar_visible="confirm,post,cancel"/>
                     </header>
+                    <!-- Invisible Fields -->
+                    <group>
+                        <field name="view_count" invisible="1"/>
+                    </group>
+                    <!-- END -->
                     <sheet>
                         <div class="oe_button_box" name="button_box">
                             <button class="oe_stat_button" type="object" name="action_view_lines" icon="fa-bar-chart">
-                               <field string="Analytic Account Line" name="view_count" widget="statinfo"/>
+                               <field string="Analytic Account Line" name="view_count_data" widget="statinfo"/>
                             </button>
                         </div>
                         <group>
@@ -69,8 +74,9 @@
             </field>
         </record>
 
-        <record id="analytic_acc_line_view_form" model="ir.ui.view">
-            <field name="name">analytic_acc_line_view</field>
+
+        <record id="analytic_acc_line_view_form_new" model="ir.ui.view">
+            <field name="name">analytic_acc_line_view_form</field>
             <field name="model">team.analytic.line</field>
             <field name="arch" type="xml">
                 <form string="Team Analytic Account Line">
@@ -78,11 +84,17 @@
                         <group>
                             </group>
                                 <field name="name"/>
-                                <field name="name"/>
+                                <field name="date"/>
+                                <field name="amount"/>
+                                <field name="unit_amount"/>
+                                <field name="product_uom_id"/>
                             <group>
                             <group>
-                                <field name="name"/>
-                                <field name="name"/>
+                                <field name="product_uom_category_id"/>
+                                <field name="partner_id"/>
+                                <field name="user_id"/>
+                                <field name="company_id"/>
+                                <field name="currency_id"/>
                             </group>
                         </group>
                     </sheet>
@@ -90,13 +102,22 @@
             </field>
         </record>
 
-
-        <record id="analytic_acc_line_view_tree" model="ir.ui.view">
-            <field name="name">analytic_acc_line_view</field>
+        <record id="analytic_acc_line_view_tree_new" model="ir.ui.view">
+            <field name="name">analytic_acc_line_view_tree</field>
             <field name="model">team.analytic.line</field>
             <field name="arch" type="xml">
                 <tree string="Team Analytic Account Line">
+                    <field name="team_profit_loss_conn" string="Name"/>
                     <field name="name"/>
+                    <field name="date"/>
+                    <field name="amount"/>
+                    <field name="unit_amount"/>
+                    <field name="product_uom_id"/>
+                    <field name="product_uom_category_id"/>
+                    <field name="partner_id"/>
+                    <field name="user_id"/>
+                    <field name="company_id"/>
+                    <field name="currency_id"/>
                 </tree>
             </field>
         </record>
