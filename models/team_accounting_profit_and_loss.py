@@ -2,6 +2,8 @@ from odoo import fields, models, api, _
 class ProfitAndLoss(models.Model):
     _name = 'team.profit.loss'
     _description = 'Team Profit and Loss'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
+
 
     name = fields.Char(string="Profit and Loss", readonly=True, copy=False, default='New')
     state = fields.Selection([('draft', 'Draft'), ('confirm', 'Confirmed'),
@@ -14,6 +16,7 @@ class ProfitAndLoss(models.Model):
     fetch_analytic_line_data = fields.Float()
     view_count = fields.Integer(compute='fetch_analytic_line_count', string='Counting in Form')
     view_count_data = fields.Integer(string='Passed Data from View Count')
+    notes = fields.Char('Notes')
 
     def fetch_analytic_line_count(self):
         self.view_count = 0
@@ -66,10 +69,12 @@ class ProfitAndLoss(models.Model):
 class TeamProfitLossLine(models.Model):
     _name = 'team.profit.loss.line'
     _description = 'Team Profit and Loss Move Line'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
+
 
     team_and_l = fields.Many2one('team.profit.loss')
     connection = fields.Many2one('team.analytic.line')
-    analytic_acc = fields.Many2one('account.analytic.account', 'Analytic Account')
+    analytic_acc = fields.Many2one('account.analytic.account', 'Analytic Account', required=True)
     debit_line_team = fields.Float('Debit', related='analytic_acc.ann_account_debit', stored=True)
     credit_line_team = fields.Float('Credit', related='analytic_acc.ann_account_credit', stored=True)
     balance_line_team = fields.Float('Balance', related='analytic_acc.ann_account_balance', stored=True)
@@ -103,6 +108,8 @@ class TeamProfitLossLine(models.Model):
 class AnalyticLine(models.Model):
     _name = 'team.analytic.line'
     _description = 'Team Pacific Corp Analytic Line'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
+
 
     team_profit_loss_conn = fields.Many2one('team.profit.loss')
     connection_id = fields.Many2one('account.analytic.account')
@@ -112,9 +119,9 @@ class AnalyticLine(models.Model):
     def _default_user(self):
         return self.env.context.get('user_id', self.env.user.id)
 
-    name = fields.Char('Description', required=True)
-    date = fields.Date('Date', required=True, index=True, default=fields.Date.context_today)
-    amount = fields.Monetary('Amount', required=True, default=0.0)
+    name = fields.Char('Description')
+    date = fields.Date('Date',  index=True, default=fields.Date.context_today)
+    amount = fields.Monetary('Amount', default=0.0)
     unit_amount = fields.Float('Quantity', default=0.0)
     product_uom_id = fields.Many2one('uom.uom', string='Unit of Measure',
                                      domain="[('category_id', '=', product_uom_category_id)]")
