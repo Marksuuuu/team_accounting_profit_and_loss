@@ -18,6 +18,8 @@
                         <button id="button_cancel" name="action_cancel" string="Cancel" states="draft,done,confirm"
                             confirm="Are you sure that you need to cancel ?"
                             type="object"/>
+
+                        <button name="_onchange_fetch_analytic_acc_line"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,done,confirm"/>
                     </header>
                     <!-- Invisible Fields -->
@@ -55,7 +57,7 @@
                                 <page string="Analytic Account">
                                     <field name="connection">
                                         <tree editable="bottom">
-                                            <field name="analytic_acc"/>
+                                            <field name="analytic_acc" required="1"/>
                                             <field name="debit_line_team"/>
                                             <field name="credit_line_team"/>
                                             <field name="balance_line_team"/>

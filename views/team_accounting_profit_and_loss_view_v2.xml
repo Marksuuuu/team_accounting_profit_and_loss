@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+       <record id="team_profit_loss_v2_view_tree" model="ir.ui.view">
+           <field name="name">team_profit_loss_v2_tree</field>
+           <field name="model">team.profit.loss.v2</field>
+           <field name="arch" type="xml">
+               <tree string="Team Profit and Loss">
+                   <field name="name"/>
+               </tree>
+           </field>
+       </record>
+
+        <record id="team_profit_loss_v2_view_form" model="ir.ui.view">
+            <field name="name">team_profit_loss_v2_tree</field>
+            <field name="model">team.profit.loss.v2</field>
+            <field name="arch" type="xml">
+                <form string="Team Profit and Loss">
+                    <header>
+                        <button type="object" name="check_id" string="Test Connection"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name" placeholder="Title"/>
+                            </h1>
+                        </div>
+                        <group>
+                            </group>
+                                <field name="analytic_acc" widget="many2many_tags"/>
+                            <group>
+
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

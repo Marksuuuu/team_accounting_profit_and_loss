@@ -71,7 +71,6 @@ class TeamProfitLossLine(models.Model):
     _description = 'Team Profit and Loss Move Line'
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
-
     team_and_l = fields.Many2one('team.profit.loss')
     connection = fields.Many2one('team.analytic.line')
     analytic_acc = fields.Many2one('account.analytic.account', 'Analytic Account', required=True)
@@ -87,8 +86,8 @@ class TeamProfitLossLine(models.Model):
 
     @api.onchange('analytic_acc')
     def _onchange_fetch_analytic_acc_line(self):
-        for rec in self:
-            get_id = rec.analytic_acc.line_ids
+        for rec in self.analytic_acc:
+            get_id = rec.line_ids
             get_connection_data = rec.team_and_l._origin.id  #"""<--- In Here you can use ._origin.id to get the id if you have encounter <NewId origin=1> """
             print(get_connection_data)
             for pass_data in get_id:
@@ -109,7 +108,6 @@ class AnalyticLine(models.Model):
     _name = 'team.analytic.line'
     _description = 'Team Pacific Corp Analytic Line'
     _inherit = ['mail.thread', 'mail.activity.mixin']
-
 
     team_profit_loss_conn = fields.Many2one('team.profit.loss')
     connection_id = fields.Many2one('account.analytic.account')

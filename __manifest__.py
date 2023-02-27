@@ -21,6 +21,7 @@
         # Views
         'views/team_accounting_profit_and_loss_view_menu.xml',
         'views/team_accounting_profit_and_loss_view.xml',
+        'views/team_accounting_profit_and_loss_view_v2.xml',
         'views/analytic_account_view.xml',
 
         #Reports
