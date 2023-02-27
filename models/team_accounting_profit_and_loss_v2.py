@@ -21,10 +21,29 @@ class ProfitAndLossV2(models.Model):
     # analytic_acc = fields.Many2many('account.analytic.account', 'your_many2many_table_name', 'column_1', 'columns_2',
     #                                 string="My many2many Field", domain=_add_domain)
 
-    def set_values(self):
-        res = super(ProfitAndLossV2, self).set_values()
-        self.env['ir.config_parameter'].set_param('team_accounting_profit_and_loss.analytic_acc', self.analytic_acc.ids)
+    def _find_default_analytic_id(self):
+        alias = self.env.ref('team_accounting_profit_and_loss.analytic_acc', False)
+        return alias
+    
+    @api.model
+    def get_values(self):
+        res = super(ProfitAndLossV2, self).get_values()
+        alias = self._find_default_analytic_id()
+        res.update(
+            analytic_acc=alias.alias_name if alias else False,
+        )
         return res
+
+    def set_values(self):
+        super(ProfitAndLossV2, self).set_values()
+        analytic_var = self._find_default_analytic_id()
+        if analytic_var:
+            analytic_var.write({
+                'analytic_acc': self.analytic_acc.id
+            })
+        else:
+            #checking if have data
+            return False
     #
     # @api.model
     # def get_values(self):
