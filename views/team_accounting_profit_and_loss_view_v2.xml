@@ -20,18 +20,30 @@
                         <button type="object" name="check_id" string="Test Connection"/>
                     </header>
                     <sheet>
-                        <div class="oe_title">
-                            <label for="name"/>
-                            <h1>
-                                <field name="name" placeholder="Title"/>
-                            </h1>
-                        </div>
                         <group>
-                            </group>
+                            <div class="oe_title">
+                                <label for="name"/>
+                                <h1>
+                                    <field name="name" placeholder="Title"/>
+                                </h1>
+                            </div>
+                        </group>
+                        <group>
+                            <group>
                                 <field name="analytic_acc" widget="many2many_tags"/>
+                                <group>
+                                    <field name="move_id" widget="many2many_tags"/>
+                                </group>
+                            </group>
+                        </group>
                             <group>
 
                         </group>
+                        <notebook>
+                            <page string="Entry">
+
+                            </page>
+                        </notebook>
                     </sheet>
                 </form>
             </field>

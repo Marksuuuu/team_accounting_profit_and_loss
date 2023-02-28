@@ -1,31 +1,23 @@
 from odoo import fields, models, api
+from ast import literal_eval
 
 
 class ResConfigSettings(models.TransientModel):
     _inherit = 'res.config.settings'
 
-    def _find_default_analytic_id(self):
-        analytic_var = self.env.ref('team.profit.loss.v2', False)
-        return analytic_var
+    analytic_ids = fields.Many2many('account.analytic.account', string='Analytic Account')
+
+    def set_values(self):
+        res = super(ResConfigSettings, self).set_values()
+        self.env['ir.config_parameter'].set_param('team_accounting_profit_and_loss.analytic_ids', self.analytic_ids)
+        return res
 
     @api.model
     def get_values(self):
         res = super(ResConfigSettings, self).get_values()
-        alias = self._find_default_analytic_id()
+        get_val = self.env['ir.config_parameter'].sudo()
+        analytic_var = get_val.get_param('team_accounting_profit_and_loss.analytic_ids')
         res.update(
-            crm_alias_prefix=alias.alias_name if alias else False,
+            analytic_ids=[(6, 0, literal_eval(analytic_var))]
         )
         return res
-
-    def set_values(self):
-        super(ResConfigSettings, self).set_values()
-        alias = self._find_default_lead_alias_id()
-        if alias:
-            alias.write({'alias_name': self.crm_alias_prefix})
-        else:
-            self.env['mail.alias'].with_context(
-                alias_model_name='crm.lead',
-                alias_parent_model_name='crm.team').create({'alias_name': self.crm_alias_prefix})
-
-        for team in self.env['crm.team'].search([]):
-            team.alias_id.write(team.get_alias_values())
